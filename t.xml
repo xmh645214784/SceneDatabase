@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene version="0.5.0">
+   <integrator type="multichannel">
+      <integrator type="path"/>
+      <integrator type="field">
+         <string name="field" value="distance"/>
+      </integrator>
+   </integrator>
+   <sensor type="perspective">
+      <film type="hdrfilm">
+         <string name="pixelFormat" value="rgb, luminance"/>
+         <string name="channelNames" value="color, depth"/>
+      </film>
+      <transform name="toWorld">
+         <lookat origin="-1.4841 3.5418 0.91982" target="0.62253 3.5418 -1.4575" up="0 0 1"/>
+      </transform>
+   </sensor>
+   <shape type="shapenet">
+      <string name="filename" value="D:/shapenet/4290c1a305f46cba4cc1952ae0d6e81a/model.obj"/>
+      <transform name="toWorld">
+         <matrix value="-0.44452 0 -3.5418 1.0473 -3.5418 0 0.44452 4.1687 0 3.5696 0 -0.24686 0 0 0 1"/>
+      </transform>
+   </shape>
+   <shape type="shapenet">
+      <string name="filename" value="D:/shapenet/5ce845f80b1d407282dde982679cd879/model.obj"/>
+      <transform name="toWorld">
+         <matrix value="-0.19294 0 -1.8571 0.82273 -1.8571 0 0.19294 2.5182 0 1.8671 0 -0.86136 0 0 0 1"/>
+      </transform>
+   </shape>
+   <shape type="shapenet">
+      <string name="filename" value="D:/shapenet/ad4ca1e6d178dedfbdc5348d65406054/model.obj"/>
+      <transform name="toWorld">
+         <matrix value="2.7015 0 -0.27708 -1.0864 -0.27708 0 -2.7015 1.9045 0 2.7157 0 -0.14773 0 0 0 1"/>
+      </transform>
+   </shape>
+   <shape type="shapenet">
+      <string name="filename" value="D:/shapenet/da5f13f4048dbd72fcb8d8c6d4df8143/model.obj"/>
+      <transform name="toWorld">
+         <matrix value="-0.17435 0 -1.1623 2.5667 -1.1623 0 0.17435 4.8 0 1.1753 0 0.11833 0 0 0 1"/>
+      </transform>
+   </shape>
+   <shape type="cube">
+      <transform name="toWorld">
+         <matrix value="0.01 0 0 -1.7282 0 1.911 0 3.5418 0 0 1.2512 -0.2063 0 0 0 1"/>
+      </transform>
+   </shape>
+   <shape type="cube">
+      <transform name="toWorld">
+         <matrix value="2.3407 0 0 0.62253 0 0.01 0 5.4628 0 0 1.2512 -0.2063 0 0 0 1"/>
+      </transform>
+   </shape>
+   <shape type="cube">
+      <transform name="toWorld">
+         <matrix value="0.01 0 0 2.9733 0 1.911 0 3.5418 0 0 1.2512 -0.2063 0 0 0 1"/>
+      </transform>
+   </shape>
+   <shape type="cube">
+      <transform name="toWorld">
+         <matrix value="2.3407 0 0 0.62253 0 0.01 0 1.6208 0 0 1.2512 -0.2063 0 0 0 1"/>
+      </transform>
+   </shape>
+   <shape type="cube">
+      <transform name="toWorld">
+         <matrix value="2.3407 0 0 0.62253 0 1.911 0 3.5418 0 0 0.01 -1.4675 0 0 0 1"/>
+      </transform>
+   </shape>
+   <emitter type="point">
+      <point name="position" x="0.62253" y="3.5418" z="0.91982"/>
+      <spectrum name="intensity" value="100"/>
+   </emitter>
+   <shape id="origin" type="sphere">
+      <point name="center" x="0" y="0" z="0"/>
+      <float name="radius" value="0.1"/>
+      <bsdf type="diffuse">
+         <rgb name="diffuseReflectance" value="0, 0, 0"/>
+      </bsdf>
+   </shape>
+   <shape id="x" type="sphere">
+      <point name="center" x="10" y="0" z="0"/>
+      <float name="radius" value="0.1"/>
+      <bsdf type="diffuse">
+         <rgb name="diffuseReflectance" value="1, 0, 0"/>
+      </bsdf>
+   </shape>
+   <shape id="y" type="sphere">
+      <point name="center" x="0" y="10" z="0"/>
+      <float name="radius" value="0.1"/>
+      <bsdf type="diffuse">
+         <rgb name="diffuseReflectance" value="0, 1, 0"/>
+      </bsdf>
+   </shape>
+   <shape id="z" type="sphere">
+      <point name="center" x="0" y="0" z="10"/>
+      <float name="radius" value="0.1"/>
+      <bsdf type="diffuse">
+         <rgb name="diffuseReflectance" value="0, 0, 1"/>
+      </bsdf>
+   </shape>
+</scene>
