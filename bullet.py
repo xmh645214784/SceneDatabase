@@ -121,14 +121,17 @@ class Game(DirectObject):
     self.allTheThingsNP[0].node().setActive(True)
     self.allTheThingsNP[0].node().applyCentralForce(force)
     self.allTheThingsNP[0].node().applyTorque(torque)
-
+    
 
 
   def update(self, task):
     dt = globalClock.getDt()
     #self.processInput(dt)
-    self.AIworld.update()
     self.world.doPhysics(dt, 3, 1.0/180.0)
+    self.personNP.node().setActive(True)
+    force = Vec3(3,3,0)
+    # force = render.getRelativeVector(self.personNP, force)
+    self.personNP.node().applyCentralForce(force)
     return task.cont
 
   def cleanup(self):
@@ -162,13 +165,13 @@ class Game(DirectObject):
     self.world.setDebugNode(self.debugNP.node())
 
     # Ground (static)
-    shape = BulletPlaneShape(Vec3(0, 0, 1), 1)
-    self.groundNP = self.worldNP.attachNewNode(BulletRigidBodyNode('Ground'))
-    self.groundNP.node().addShape(shape)
-    self.groundNP.setPos(0, 0, -10)
-    self.groundNP.setCollideMask(BitMask32.allOn())
+    # shape = BulletPlaneShape(Vec3(0, 0, 1), 1)
+    # self.groundNP = self.worldNP.attachNewNode(BulletRigidBodyNode('Ground'))
+    # self.groundNP.node().addShape(shape)
+    # self.groundNP.setPos(0, 0, -10)
+    # self.groundNP.setCollideMask(BitMask32.allOn())
 
-    self.world.attachRigidBody(self.groundNP.node())
+    # self.world.attachRigidBody(self.groundNP.node())
 
     # add all the thing
     temp_for_debug=0
@@ -178,15 +181,20 @@ class Game(DirectObject):
         temp_for_debug=temp_for_debug+1
 
     # add all walls
+    human_pos = []
     temp_for_debug=0
     for each in parseXml_RetPathAndMatrixPair_Wall("t.xml"):
         if(temp_for_debug in [0,1,2,3,4]):
-            self.addOneWall(each)
+          self.addOneWall(each)
+        if(temp_for_debug == 4):
+          human_pos.append(each[0][3])
+          human_pos.append(each[1][3])
+          human_pos.append(each[2][3])
         temp_for_debug=temp_for_debug+1
 
-    # add a panda
-    self.loadModels()
-    self.setAI()
+    # add a human
+    self.addOneHuman(human_pos)    
+
 
 
   def addOneThing(self,objPath,matrix):
@@ -220,29 +228,20 @@ class Game(DirectObject):
       # tempNP.node().setInertia(LVecBase3(0,0,-100000))
       tempNP.setCollideMask(BitMask32.allOn())
       self.world.attachRigidBody(tempNP.node())
-      self.allTheThingsNP.append(tempNP)  
-  
-  def loadModels(self):
-      # Seeker
-      self.wanderer = Actor("models/panda",
-                                {"run":"../../../../Panda3D-1.9.4-x64/models/panda-walk.egg.pz"})                                
-      self.wanderer.reparentTo(render)
-      self.wanderer.setScale(0.1)
-      self.wanderer.setPos(Vec3(0, 0, 0))
- 
-  def setAI(self):
-      #Creating AI World
-      self.AIworld = AIWorld(render)
+      self.allTheThingsNP.append(tempNP)
 
-      self.AIchar = AICharacter("wanderer",self.wanderer, 100, 0.05, 5)
-      self.AIworld.addAiChar(self.AIchar)
-      self.AIbehaviors = self.AIchar.getAiBehaviors()
-
-      self.AIbehaviors.wander(5, 0, 10, 1.0)
-      self.wanderer.loop("run")
-
-      #AI World update        
-      # taskMgr.add(self.AIUpdate,"AIUpdate")
+  def addOneHuman(self,human_pos):
+      shape = BulletBoxShape(Vec3(0.1,0.1,0.5))
+      tempNP = self.worldNP.attachNewNode(BulletRigidBodyNode('human'))
+      self.index=self.index+1
+      tempNP.node().setMass(1.0)
+      tempNP.node().addShape(shape)
+      tempNP.setPos(human_pos[0],human_pos[1],human_pos[2]+5) 
+      tempNP.node().setInertia(LVecBase3(0,0,-1000))
+      tempNP.setCollideMask(BitMask32.allOn())
+      self.world.attachRigidBody(tempNP.node())
+      self.allTheThingsNP.append(tempNP)
+      self.personNP = tempNP
 
 game = Game()
 base.run()
