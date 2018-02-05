@@ -16,25 +16,25 @@
       </transform>
    </sensor>
    <shape type="shapenet">
-      <string name="filename" value="D:/shapes/4290c1a305f46cba4cc1952ae0d6e81a/model.obj"/>
+      <string name="filename" value="C:/shapes/4290c1a305f46cba4cc1952ae0d6e81a/model.obj"/>
       <transform name="toWorld">
          <matrix value="-0.44452 0 -3.5418 1.0473 -3.5418 0 0.44452 4.1687 0 3.5696 0 -0.24686 0 0 0 1"/>
       </transform>
    </shape>
    <shape type="shapenet">
-      <string name="filename" value="D:/shapes/5ce845f80b1d407282dde982679cd879/model.obj"/>
+      <string name="filename" value="C:/shapes/5ce845f80b1d407282dde982679cd879/model.obj"/>
       <transform name="toWorld">
          <matrix value="-0.19294 0 -1.8571 0.82273 -1.8571 0 0.19294 2.5182 0 1.8671 0 -0.86136 0 0 0 1"/>
       </transform>
    </shape>
    <shape type="shapenet">
-      <string name="filename" value="D:/shapes/ad4ca1e6d178dedfbdc5348d65406054/model.obj"/>
+      <string name="filename" value="C:/shapes/ad4ca1e6d178dedfbdc5348d65406054/model.obj"/>
       <transform name="toWorld">
          <matrix value="2.7015 0 -0.27708 -1.0864 -0.27708 0 -2.7015 1.9045 0 2.7157 0 -0.14773 0 0 0 1"/>
       </transform>
    </shape>
    <shape type="shapenet">
-      <string name="filename" value="D:/shapes/da5f13f4048dbd72fcb8d8c6d4df8143/model.obj"/>
+      <string name="filename" value="C:/shapes/da5f13f4048dbd72fcb8d8c6d4df8143/model.obj"/>
       <transform name="toWorld">
          <matrix value="-0.17435 0 -1.1623 2.5667 -1.1623 0 0.17435 4.8 0 1.1753 0 0.11833 0 0 0 1"/>
       </transform>

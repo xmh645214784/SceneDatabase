@@ -4,9 +4,14 @@ import direct.directbase.DirectStart
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.InputStateGlobal import inputState
 
+from direct.task import Task
+from direct.actor.Actor import Actor
+#for Pandai
+from panda3d.ai import *
 
 from direct.showbase.ShowBase import ShowBase, LVecBase3
 
+from panda3d.core import *
 from panda3d.core import AmbientLight
 from panda3d.core import DirectionalLight
 from panda3d.core import Vec3
@@ -122,6 +127,7 @@ class Game(DirectObject):
   def update(self, task):
     dt = globalClock.getDt()
     #self.processInput(dt)
+    self.AIworld.update()
     self.world.doPhysics(dt, 3, 1.0/180.0)
     return task.cont
 
@@ -169,14 +175,19 @@ class Game(DirectObject):
     for each in parseXml_RetPathAndMatrixPair("t.xml"):
         if(temp_for_debug in [0,1]):
             self.addOneThing(each[0],each[1])
-        temp_for_debug=temp_for_debug+1;
+        temp_for_debug=temp_for_debug+1
 
     # add all walls
     temp_for_debug=0
     for each in parseXml_RetPathAndMatrixPair_Wall("t.xml"):
         if(temp_for_debug in [0,1,2,3,4]):
             self.addOneWall(each)
-        temp_for_debug=temp_for_debug+1;
+        temp_for_debug=temp_for_debug+1
+
+    # add a panda
+    self.loadModels()
+    self.setAI()
+
 
   def addOneThing(self,objPath,matrix):
       # shape = BulletTriangleMeshShape(obj2TriangleMesh(objPath,matrix), dynamic=True)
@@ -211,6 +222,28 @@ class Game(DirectObject):
       self.world.attachRigidBody(tempNP.node())
       self.allTheThingsNP.append(tempNP)  
   
+  def loadModels(self):
+      # Seeker
+      self.wanderer = Actor("models/panda",
+                                {"run":"../../../../Panda3D-1.9.4-x64/models/panda-walk.egg.pz"})                                
+      self.wanderer.reparentTo(render)
+      self.wanderer.setScale(0.1)
+      self.wanderer.setPos(Vec3(0, 0, 0))
+ 
+  def setAI(self):
+      #Creating AI World
+      self.AIworld = AIWorld(render)
+
+      self.AIchar = AICharacter("wanderer",self.wanderer, 100, 0.05, 5)
+      self.AIworld.addAiChar(self.AIchar)
+      self.AIbehaviors = self.AIchar.getAiBehaviors()
+
+      self.AIbehaviors.wander(5, 0, 10, 1.0)
+      self.wanderer.loop("run")
+
+      #AI World update        
+      # taskMgr.add(self.AIUpdate,"AIUpdate")
+
 game = Game()
 base.run()
 
