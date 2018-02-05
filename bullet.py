@@ -23,7 +23,7 @@ from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletDebugNode
 
 from parseObj import obj2TriangleMesh, obj2ConvexHull
-from parseXml import parseXml_RetPathAndMatrixPair
+from parseXml import parseXml_RetPathAndMatrixPair, parseXml_RetPathAndMatrixPair_Wall
 
 
 class Game(DirectObject):
@@ -167,14 +167,21 @@ class Game(DirectObject):
     # add all the thing
     temp_for_debug=0
     for each in parseXml_RetPathAndMatrixPair("t.xml"):
-        if(temp_for_debug in [0,1,2,3]):
+        if(temp_for_debug in [0,1]):
             self.addOneThing(each[0],each[1])
         temp_for_debug=temp_for_debug+1;
 
+    # add all walls
+    temp_for_debug=0
+    for each in parseXml_RetPathAndMatrixPair_Wall("t.xml"):
+        if(temp_for_debug in [0,1,2,3,4]):
+            self.addOneWall(each)
+        temp_for_debug=temp_for_debug+1;
 
   def addOneThing(self,objPath,matrix):
       # shape = BulletTriangleMeshShape(obj2TriangleMesh(objPath,matrix), dynamic=True)
       shape=obj2ConvexHull(objPath,matrix)
+      # shape=obj2ConvexHull(objPath,matrix)
       tempNP = self.worldNP.attachNewNode(BulletRigidBodyNode('thing' + str(self.index)))
       self.index=self.index+1
       tempNP.node().setMass(1.0)
@@ -184,6 +191,26 @@ class Game(DirectObject):
       tempNP.setCollideMask(BitMask32.allOn())
       self.world.attachRigidBody(tempNP.node())
       self.allTheThingsNP.append(tempNP)
+
+  def addOneWall(self,matrix):
+      import numpy as np
+      # Calculates the values of two vertices (1,1,1),(-1,-1,-1) after the matrix transformation.
+      vec1=np.array([1,1,1,1])
+      vec1=np.dot(matrix,vec1)
+      vec2=np.array([-1,-1,-1,1])
+      vec2=np.dot(matrix,vec2)    
+      # The full extents of the box will be twice the half extents, Two vertices (1,1,1),(-1,-1,-1) can determine box pos and vec.
+      shape = BulletBoxShape(Vec3((vec1[0]-vec2[0])/2, (vec1[1]-vec2[1])/2, (vec1[2]-vec2[2])/2))
+      tempNP = self.worldNP.attachNewNode(BulletRigidBodyNode('wall' + str(self.index)))
+      self.index=self.index+1
+      # tempNP.node().setMass(1.0)
+      tempNP.node().addShape(shape)
+      tempNP.setPos((vec1[0]+vec2[0])/2, (vec1[1]+vec2[1])/2, (vec1[2]+vec2[2])/2) 
+      # tempNP.node().setInertia(LVecBase3(0,0,-100000))
+      tempNP.setCollideMask(BitMask32.allOn())
+      self.world.attachRigidBody(tempNP.node())
+      self.allTheThingsNP.append(tempNP)  
+  
 game = Game()
 base.run()
 
